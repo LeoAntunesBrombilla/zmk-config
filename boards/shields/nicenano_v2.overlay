@@ -1,0 +1,14 @@
+&zephyr {
+    bt {
+        compatible = "zmk,ble";
+    };
+};
+
+&battery {
+    compatible = "zmk,battery";
+};
+
+&pro_micro {
+    compatible = "zmk,corne_left";
+};
+
