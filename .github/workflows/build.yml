@@ -1,6 +1,32 @@
-name: Build ZMK firmware
-on: [push, pull_request, workflow_dispatch]
-
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    name: Build Firmware
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        board: [nice_nano_v2]
+        shield: [corne_left]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up Zephyr SDK
+        run: |
+          wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.14.2/zephyr-sdk-0.14.2-linux-x86_64.tar.xz
+          tar -xJf zephyr-sdk-0.14.2-linux-x86_64.tar.xz
+          export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+          export ZEPHYR_SDK_INSTALL_DIR=zephyr-sdk-0.14.2
+          source $ZEPHYR_SDK_INSTALL_DIR/zephyr-env.sh
+      - name: Set up west (Zephyr's meta-tool)
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install west
+          west init -l
+          west update
+      - name: Configure and Build
+        run: |
+          west build -b ${{ matrix.board }} -s app --shield ${{ matrix.shield }}
+      - name: Upload Firmware Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: firmware-${{ matrix.board }}-${{ matrix.shield }}
+          path: build/zephyr/zephyr.bin
