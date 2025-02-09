@@ -37,7 +37,7 @@ jobs:
           west build -b nice_nano_v2 -s app --shield corne_left  # Directly build for nice_nano_v2 and corne_left
 
       - name: Upload Firmware Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: firmware-nice_nano_v2-corne_left  # Artifact name includes board and shield
           path: build/zephyr/zephyr.bin  # Path to the firmware binary
