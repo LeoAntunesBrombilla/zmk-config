@@ -1,4 +1,10 @@
-#include "nice_nano_v2.dtsi"
+/*
+ * Copyright (c) 2020 Pete Johanson
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include "corne.dtsi"
 
 &kscan0 {
     col-gpios
